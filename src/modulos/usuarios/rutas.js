@@ -1,12 +1,13 @@
 const express = require('express');
+const seguridad = require('./seguridad');
 const respuesta = require('../../red/respuestas')
 const controlador = require('./index')
 const router = express.Router();
 
 router.get('/', listado);
 router.get('/:id', listadofiltro);
-router.post('/', agregar);
-router.delete('/', eliminar);
+router.post('/', seguridad(),agregar);
+router.delete('/', seguridad() , eliminar);
 
 
 async function listado (req, res, next)  {
