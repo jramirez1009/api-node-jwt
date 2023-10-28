@@ -50,6 +50,18 @@ function listadofiltro(tabla, id){
     })
 }
 
+
+function agregar(tabla, data){
+    return new Promise((resolve, reject) => {
+        conexion.query(`INSERT INTO ${tabla} SET ? ON DUPLICATE KEY UPDATE ? `, [data,data] , (error, result) => {
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
+/*
+Antes de optmizar
 function agregar(tabla, data){
     if(data && data.id == 0){
         return insertar(tabla, data)
@@ -75,7 +87,7 @@ function actualizar(tabla, data){
         })
     })
 }
-
+*/
 function eliminar(tabla, data){
     return new Promise((resolve, reject) => {
         conexion.query(`DELETE FROM ${tabla} WHERE id=?`, data.id , (error, result) => {
@@ -85,10 +97,21 @@ function eliminar(tabla, data){
     })
 }
 
+function query(tabla, consulta){
+    
+    return new Promise((resolve, reject) => {
+        conexion.query(`SELECT * FROM ${tabla} WHERE ?`, consulta , (error, result) => {
+            if(error) return reject(error);            
+            resolve(result[0]);
+        })
+    })
+}
+
 module.exports = {
     listado, 
     listadofiltro,
     agregar,
-    eliminar
+    eliminar,
+    query
 
 }
